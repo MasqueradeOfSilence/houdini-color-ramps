@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 
 
 def build_individual_color(color_position1, color_position2, num_desired_points,
@@ -31,14 +32,17 @@ def build_individual_color(color_position1, color_position2, num_desired_points,
         current_color_ramp.append([new_red, new_green, new_blue])
         num_iterations += 1
     current_color_ramp.append(color2)
-    print("The other color ramp: " + str(color_ramp))
-    return color_ramp
+    print("Created color ramp: " + str(current_color_ramp))
+    return current_color_ramp
 
 
 def build_color_ramp(color_position1, color_position2, color_position3, color_position4, num_desired_points, color1,
                      color2, color3, color4):
     print("Building a color ramp")
-    color1 = build_individual_color(color_position1, color_position2, num_desired_points, color1, color2)
+    final_ramp = build_individual_color(color_position1, color_position2, num_desired_points, color1, color2)
+    final_ramp += build_individual_color(color_position2, color_position3, num_desired_points, color2, color3)
+    final_ramp += build_individual_color(color_position3, color_position4, num_desired_points, color3, color4)
+    return final_ramp
 
 
 print("Hello Houdini color ramps!")
@@ -54,50 +58,10 @@ yellow_position = 0.893
 white_position = 1
 # We desire 96 points because we already have 4, and want 100 total.
 desired_points = 96
-# determine distances
-distance_orange_to_black = orange_position - black_position
-distance_yellow_to_orange = yellow_position - orange_position
-distance_white_to_yellow = white_position - yellow_position
-print("Orange to black distance: " + str(distance_orange_to_black))
-print("Yellow to orange distance: " + str(distance_yellow_to_orange))
-print("White to yellow distance: " + str(distance_white_to_yellow))
-# determine what percent each distance is
-num_points_between_orange_and_black = distance_orange_to_black * desired_points
-num_points_between_yellow_and_orange = distance_yellow_to_orange * desired_points
-num_points_between_white_and_yellow = distance_white_to_yellow * desired_points
-print("Orange to black points: " + str(num_points_between_orange_and_black))
-print("Yellow to orange points: " + str(num_points_between_yellow_and_orange))
-print("White to yellow points: " + str(num_points_between_white_and_yellow))
-# Compute the distance between each point for r, g, and b
-black_to_orange_step_size_red = (orange[0] - black[0]) / num_points_between_orange_and_black
-black_to_orange_step_size_green = (orange[1] - black[1]) / num_points_between_orange_and_black
-black_to_orange_step_size_blue = (orange[2] - black[2]) / num_points_between_orange_and_black
-print("Black to orange step size red: " + str(black_to_orange_step_size_red))
-print("Black to orange step size green: " + str(black_to_orange_step_size_green))
-print("Black to orange step size blue: " + str(black_to_orange_step_size_blue))
-# Next, increment the values
-num_iterations = 0
-color_ramp = [black]
-prev_red = black[0]
-prev_green = black[1]
-prev_blue = black[2]
-while num_iterations < num_points_between_orange_and_black:
-    new_red = prev_red + black_to_orange_step_size_red
-    new_green = prev_green + black_to_orange_step_size_green
-    new_blue = prev_blue + black_to_orange_step_size_blue
-    prev_red = new_red
-    prev_green = new_green
-    prev_blue = new_blue
-    if new_red > 1 or new_green > 1 or new_blue > 1:
-        break
-    color_ramp.append([new_red, new_green, new_blue])
-    num_iterations += 1
-color_ramp.append(orange)
-print("Done adding orange to black points")
-print("That color ramp: " + str(color_ramp))
-# Now we need to do it for yellow to orange
-yellow_to_orange_step_size_red = (yellow[0] - orange[0]) / num_points_between_yellow_and_orange
-# ok I bet if I clean this up it'll be way easier. let's take a break, then switch gears
-# TESTING FOR VALIDITY:
-build_color_ramp(black_position, orange_position, yellow_position, white_position, desired_points, black, orange,
-                 yellow, white)
+ramp = build_color_ramp(black_position, orange_position, yellow_position, white_position, desired_points, black, orange,
+                        yellow, white)
+print("Final ramp: " + str(ramp))
+np_ramp = np.array(ramp)
+np_ramp = np_ramp * 255
+# print("Scaled up: " + str(np_ramp))
+cv2.imwrite("ramp.png", np_ramp)
