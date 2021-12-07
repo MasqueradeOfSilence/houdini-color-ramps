@@ -58,8 +58,9 @@ ramp = build_color_ramp(black_position, orange_position, yellow_position, white_
                         yellow, white)
 print("ramp: " + str(ramp))
 np_ramp = np.array(ramp)
-np_ramp = np_ramp * 255
+np_ramp = (np_ramp * 255).astype(np.uint8)
 np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
 print("adjusted final ramp: " + str(np_ramp))
+print("shape: " + str(np_ramp.shape))
 data = img.fromarray(np_ramp, "RGB")
 data.save("ramp.png")
