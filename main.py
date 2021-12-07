@@ -1,16 +1,12 @@
 import numpy as np
-import cv2
+from PIL import Image as img
 
 
 def build_individual_color(color_position1, color_position2, num_desired_points,
                            color1, color2):
     print("Building an individual color for the ramp")
     distance1 = color_position2 - color_position1
-    # distance2 = color_position3 - color_position2
-    # distance3 = color_position4 - color_position3
     num_points_between_2_1 = distance1 * num_desired_points
-    # num_points_between_3_2 = distance2 * num_desired_points
-    # num_points_between_4_3 = distance3 * num_desired_points
     step_size_red = (color2[0] - color1[0]) / num_points_between_2_1
     step_size_green = (color2[1] - color1[1]) / num_points_between_2_1
     step_size_blue = (color2[2] - color1[2]) / num_points_between_2_1
@@ -60,8 +56,10 @@ white_position = 1
 desired_points = 96
 ramp = build_color_ramp(black_position, orange_position, yellow_position, white_position, desired_points, black, orange,
                         yellow, white)
-print("Final ramp: " + str(ramp))
+print("ramp: " + str(ramp))
 np_ramp = np.array(ramp)
 np_ramp = np_ramp * 255
-# print("Scaled up: " + str(np_ramp))
-cv2.imwrite("ramp.png", np_ramp)
+np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
+print("adjusted final ramp: " + str(np_ramp))
+data = img.fromarray(np_ramp, "RGB")
+data.save("ramp.png")
