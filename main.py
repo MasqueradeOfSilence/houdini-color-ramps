@@ -41,26 +41,51 @@ def build_color_ramp(color_position1, color_position2, color_position3, color_po
     return final_ramp
 
 
-print("Hello Houdini color ramps!")
-# Color ramp: Standard fire.
-# We put the RGB values, and how far apart they are.
-black = [0, 0, 0]
-orange = [1, 0.432, 0]
-yellow = [1, 0.8833, 0]
-white = [1, 1, 1]
-black_position = 0
-orange_position = 0.54
-yellow_position = 0.893
-white_position = 1
-# We desire 96 points because we already have 4, and want 100 total.
-desired_points = 96
-ramp = build_color_ramp(black_position, orange_position, yellow_position, white_position, desired_points, black, orange,
-                        yellow, white)
-print("ramp: " + str(ramp))
-np_ramp = np.array(ramp)
-np_ramp = (np_ramp * 255).astype(np.uint8)
-np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
-print("adjusted final ramp: " + str(np_ramp))
-print("shape: " + str(np_ramp.shape))
-data = img.fromarray(np_ramp, "RGB")
-data.save("ramp.png")
+def build_fire_standard_color():
+    black = [0, 0, 0]
+    orange = [1, 0.432, 0]
+    yellow = [1, 0.8833, 0]
+    white = [1, 1, 1]
+    black_position = 0
+    orange_position = 0.54
+    yellow_position = 0.893
+    white_position = 1
+    # We desire 96 points because we already have 4, and want approximately 100 total.
+    desired_points = 96
+    ramp = build_color_ramp(black_position, orange_position, yellow_position, white_position, desired_points, black,
+                            orange, yellow, white)
+    print("ramp: " + str(ramp))
+    np_ramp = np.array(ramp)
+    np_ramp = (np_ramp * 255).astype(np.uint8)
+    np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
+    print("adjusted final ramp: " + str(np_ramp))
+    print("shape: " + str(np_ramp.shape))
+    data = img.fromarray(np_ramp, "RGB")
+    data.save("ramp.png")
+
+
+def build_fire_blue():
+    black = [0, 0, 0]
+    blue = [0, 0, 1]
+    sky_blue = [0, 1, 1]
+    white = [1, 1, 1]
+    black_position = 0
+    blue_position = 0.54
+    sky_blue_position = 0.893
+    white_position = 1
+    desired_points = 96
+    ramp = build_color_ramp(black_position, blue_position, sky_blue_position, white_position, desired_points, black,
+                            blue, sky_blue, white)
+    print("ramp: " + str(ramp))
+    np_ramp = np.array(ramp)
+    np_ramp = (np_ramp * 255).astype(np.uint8)
+    np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
+    print("adjusted final ramp: " + str(np_ramp))
+    print("shape: " + str(np_ramp.shape))
+    data = img.fromarray(np_ramp, "RGB")
+    data.save("ramp_blue.png")
+
+
+print("Computing Houdini color ramps!")
+build_fire_standard_color()
+build_fire_blue()
