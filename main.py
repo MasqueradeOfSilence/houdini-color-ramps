@@ -86,6 +86,29 @@ def build_fire_blue():
     data.save("ramp_blue.png")
 
 
+def build_fire_green():
+    black = [0, 0, 0]
+    green = [0, 0.5, 0]
+    light_green = [0, 1, 0]
+    white = [1, 1, 1]
+    black_position = 0
+    green_position = 0.518797
+    light_green_position = 0.77821
+    white_position = 1
+    desired_points = 96
+    ramp = build_color_ramp(black_position, green_position, light_green_position, white_position, desired_points, black,
+                            green, light_green, white)
+    print("ramp: " + str(ramp))
+    np_ramp = np.array(ramp)
+    np_ramp = (np_ramp * 255).astype(np.uint8)
+    np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
+    print("adjusted final ramp GREEN: " + str(np_ramp))
+    print("shape: " + str(np_ramp.shape))
+    data = img.fromarray(np_ramp, "RGB")
+    data.save("ramp_green.png")
+
+
 print("Computing Houdini color ramps!")
 build_fire_standard_color()
 build_fire_blue()
+build_fire_green()
