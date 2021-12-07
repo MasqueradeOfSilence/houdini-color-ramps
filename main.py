@@ -54,7 +54,7 @@ def build_fire_standard_color():
     desired_points = 96
     ramp = build_color_ramp(black_position, orange_position, yellow_position, white_position, desired_points, black,
                             orange, yellow, white)
-    print("ramp: " + str(ramp))
+    print("ramp orange: " + str(ramp))
     np_ramp = np.array(ramp)
     np_ramp = (np_ramp * 255).astype(np.uint8)
     np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
@@ -76,7 +76,7 @@ def build_fire_blue():
     desired_points = 96
     ramp = build_color_ramp(black_position, blue_position, sky_blue_position, white_position, desired_points, black,
                             blue, sky_blue, white)
-    print("ramp: " + str(ramp))
+    print("ramp blue: " + str(ramp))
     np_ramp = np.array(ramp)
     np_ramp = (np_ramp * 255).astype(np.uint8)
     np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
@@ -98,7 +98,7 @@ def build_fire_green():
     desired_points = 96
     ramp = build_color_ramp(black_position, green_position, light_green_position, white_position, desired_points, black,
                             green, light_green, white)
-    print("ramp: " + str(ramp))
+    print("ramp green: " + str(ramp))
     np_ramp = np.array(ramp)
     np_ramp = (np_ramp * 255).astype(np.uint8)
     np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
@@ -120,7 +120,7 @@ def build_fire_pink():
     desired_points = 96
     ramp = build_color_ramp(black_position, dark_pink_position, pink_position, white_position, desired_points, black,
                             dark_pink, pink, white)
-    print("ramp: " + str(ramp))
+    print("ramp pink: " + str(ramp))
     np_ramp = np.array(ramp)
     np_ramp = (np_ramp * 255).astype(np.uint8)
     np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
@@ -130,8 +130,54 @@ def build_fire_pink():
     data.save("ramp_pink.png")
 
 
+def build_fire_turquoise():
+    black = [0, 0, 0]
+    dark_turquoise = [0, 0.5, 0.25]
+    turquoise = [0, 1, 0.5]
+    white = [1, 1, 1]
+    black_position = 0
+    dark_turquoise_position = 0.518797
+    turquoise_position = 0.77821
+    white_position = 1
+    desired_points = 96
+    ramp = build_color_ramp(black_position, dark_turquoise_position, turquoise_position, white_position, desired_points,
+                            black, dark_turquoise, turquoise, white)
+    print("ramp turquoise: " + str(ramp))
+    np_ramp = np.array(ramp)
+    np_ramp = (np_ramp * 255).astype(np.uint8)
+    np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
+    print("adjusted final ramp TURQUOISE: " + str(np_ramp))
+    print("shape: " + str(np_ramp.shape))
+    data = img.fromarray(np_ramp, "RGB")
+    data.save("ramp_turquoise.png")
+
+
+def build_fire_purple():
+    black = [0, 0, 0]
+    dark_purple = [0.25, 0, 0.5]
+    purple = [0.5, 0, 1]
+    white = [1, 1, 1]
+    black_position = 0
+    dark_purple_position = 0.518797
+    purple_position = 0.77821
+    white_position = 1
+    desired_points = 96
+    ramp = build_color_ramp(black_position, dark_purple_position, purple_position, white_position, desired_points,
+                            black, dark_purple, purple, white)
+    print("ramp purple: " + str(ramp))
+    np_ramp = np.array(ramp)
+    np_ramp = (np_ramp * 255).astype(np.uint8)
+    np_ramp = np.repeat(np_ramp[None, ...], 3, axis=0)
+    print("adjusted final ramp PURPLE: " + str(np_ramp))
+    print("shape: " + str(np_ramp.shape))
+    data = img.fromarray(np_ramp, "RGB")
+    data.save("ramp_purple.png")
+
+
 print("Computing Houdini color ramps!")
 build_fire_standard_color()
 build_fire_blue()
 build_fire_green()
 build_fire_pink()
+build_fire_turquoise()
+build_fire_purple()
